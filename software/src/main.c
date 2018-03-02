@@ -28,15 +28,18 @@
 #include "bricklib2/hal/system_timer/system_timer.h"
 #include "bricklib2/logging/logging.h"
 #include "communication.h"
+#include "pcf85263a.h"
 
 int main(void) {
 	logging_init();
 	logd("Start Real Time Clock V2 Bricklet\n\r");
 
 	communication_init();
+	pcf85263a_init();
 
 	while(true) {
 		bootloader_tick();
 		communication_tick();
+		pcf85263a_tick();
 	}
 }

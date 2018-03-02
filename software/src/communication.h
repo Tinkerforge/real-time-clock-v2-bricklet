@@ -67,15 +67,16 @@ void communication_init(void);
 // Function and callback IDs and structs
 #define FID_SET_DATE_TIME 1
 #define FID_GET_DATE_TIME 2
-#define FID_SET_OFFSET 3
-#define FID_GET_OFFSET 4
-#define FID_SET_DATE_TIME_CALLBACK_CONFIGURATION 5
-#define FID_GET_DATE_TIME_CALLBACK_CONFIGURATION 6
-#define FID_SET_ALARM 7
-#define FID_GET_ALARM 8
+#define FID_GET_TIMESTAMP 3
+#define FID_SET_OFFSET 4
+#define FID_GET_OFFSET 5
+#define FID_SET_DATE_TIME_CALLBACK_CONFIGURATION 6
+#define FID_GET_DATE_TIME_CALLBACK_CONFIGURATION 7
+#define FID_SET_ALARM 8
+#define FID_GET_ALARM 9
 
-#define FID_CALLBACK_DATE_TIME 9
-#define FID_CALLBACK_ALARM 10
+#define FID_CALLBACK_DATE_TIME 10
+#define FID_CALLBACK_ALARM 11
 
 typedef struct {
 	TFPMessageHeader header;
@@ -105,6 +106,15 @@ typedef struct {
 	uint8_t weekday;
 	int64_t timestamp;
 } __attribute__((__packed__)) GetDateTime_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetTimestamp;
+
+typedef struct {
+	TFPMessageHeader header;
+	int64_t timestamp;
+} __attribute__((__packed__)) GetTimestamp_Response;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -190,6 +200,7 @@ typedef struct {
 // Function prototypes
 BootloaderHandleMessageResponse set_date_time(const SetDateTime *data);
 BootloaderHandleMessageResponse get_date_time(const GetDateTime *data, GetDateTime_Response *response);
+BootloaderHandleMessageResponse get_timestamp(const GetTimestamp *data, GetTimestamp_Response *response);
 BootloaderHandleMessageResponse set_offset(const SetOffset *data);
 BootloaderHandleMessageResponse get_offset(const GetOffset *data, GetOffset_Response *response);
 BootloaderHandleMessageResponse set_date_time_callback_configuration(const SetDateTimeCallbackConfiguration *data);
