@@ -246,11 +246,11 @@ bool handle_alarm_callback(void) {
 	static Alarm_Callback cb;
 
 	if (!is_buffered) {
-		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(Alarm_Callback), FID_CALLBACK_ALARM);
-
 		if (!pcf85263a.alarm_triggered) {
 			return false;
 		}
+
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(Alarm_Callback), FID_CALLBACK_ALARM);
 
 		cb.year        = pcf85263a.alarm_date_time.year;
 		cb.month       = pcf85263a.alarm_date_time.month;
