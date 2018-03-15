@@ -3,7 +3,7 @@
   (general
     (links 55)
     (no_connects 0)
-    (area 125.109499 87.909499 150.490501 113.290501)
+    (area 124.445139 87.245139 282.795857 162.890793)
     (thickness 1.6002)
     (drawings 12)
     (tracks 198)
@@ -23,7 +23,7 @@
   )
 
   (layers
-    (0 Vorderseite signal hide)
+    (0 Vorderseite signal)
     (31 Rückseite signal hide)
     (32 B.Adhes user)
     (33 F.Adhes user)
@@ -43,7 +43,7 @@
   )
 
   (setup
-    (last_trace_width 0.2)
+    (last_trace_width 0.249)
     (user_trace_width 0.2)
     (user_trace_width 0.25)
     (user_trace_width 0.29972)
@@ -79,7 +79,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 125.3 113.1)
     (grid_origin 125.3 113.1)
-    (visible_elements FFFF7FFF)
+    (visible_elements FFFFFFFF)
     (pcbplotparams
       (layerselection 0x010c8_00000001)
       (usegerberextensions true)
@@ -695,11 +695,11 @@
   )
 
   (module kicad-libraries:CE_5mm (layer Rückseite) (tedit 5922FFD4) (tstamp 564BFA10)
-    (at 137.8 104.6 180)
-    (fp_text reference VAL (at 0 0 180) (layer B.SilkS) hide
+    (at 137.8 104.6)
+    (fp_text reference VAL (at 0 0) (layer B.SilkS) hide
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
-    (fp_text value CE_5mm (at 0 0 180) (layer B.SilkS) hide
+    (fp_text value CE_5mm (at 0 0) (layer B.SilkS) hide
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
     (fp_poly (pts (xy -0.55372 -1.67132) (xy -0.5715 -1.67386) (xy -0.57912 -1.6764) (xy -0.59436 -1.6764)
