@@ -1,0 +1,43 @@
+Notebook[{
+ Cell[
+  BoxData[{
+   RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}],
+   RowBox[{"LoadNETAssembly", "[", RowBox[{"\"\<Tinkerforge\>\"", ",", RowBox[{RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<../../..\>\""}]}], "]"}]
+  }], "Input"
+ ],
+ Cell[
+  BoxData[{
+   RowBox[{"host", "=", "\"\<localhost\>\""}],
+   RowBox[{"port", "=", "4223"}],
+   RowBox[{"uid", "=", "\"\<XYZ\>\"", RowBox[{"(*", "Change XYZ to the UID of your Real-Time Clock Bricklet 2.0", "*)"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Create IPConnection and device object", "*)"}],
+   RowBox[{"ipcon", "=", RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}],
+   RowBox[{"rtc", "=", RowBox[{"NETNew", "[", RowBox[{"\"\<Tinkerforge.BrickletRealTimeClockV2\>\"", ",", "uid", ",", "ipcon"}], "]"}]}],
+   RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Get current date and time", "*)"}],
+   RowBox[{"year", "=", "0", ";", "month", "=", "0", ";", "day", "=", "0", ";", "hour", "=", "0", ";", "minute", "=", "0", ";", "second", "=", "0", ";", "centisecond", "=", "0", ";", "weekday", "=", "0", ";", "timestamp", "=", "0"}],
+   RowBox[{"rtc", "@", RowBox[{"GetDateTime", "[", RowBox[{"year", ",", "month", ",", "day", ",", "hour", ",", "minute", ",", "second", ",", "centisecond", ",", "weekday", ",", "timestamp"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Year: \>\"", "<>", RowBox[{"ToString", "[", "year", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Month: \>\"", "<>", RowBox[{"ToString", "[", "month", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Day: \>\"", "<>", RowBox[{"ToString", "[", "day", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Hour: \>\"", "<>", RowBox[{"ToString", "[", "hour", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Minute: \>\"", "<>", RowBox[{"ToString", "[", "minute", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Second: \>\"", "<>", RowBox[{"ToString", "[", "second", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Centisecond: \>\"", "<>", RowBox[{"ToString", "[", "centisecond", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Weekday: \>\"", "<>", RowBox[{"ToString", "[", "weekday", "]"}]}], "]"}],
+   RowBox[{"Print", "[", RowBox[{"\"\<Timestamp: \>\"", "<>", RowBox[{"ToString", "[", RowBox[{"N", "[", RowBox[{"Quantity", "[", RowBox[{"timestamp", ",", "\"\<ms\>\""}], "]"}], "]"}], "]"}]}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Clean up", "*)"}],
+   RowBox[{"ipcon", "@", RowBox[{"Disconnect", "[", "]"}]}],
+   RowBox[{"ReleaseNETObject", "[", "rtc", "]"}],
+   RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]
+  }], "Input"
+ ]
+}]
