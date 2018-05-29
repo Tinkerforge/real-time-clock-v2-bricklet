@@ -379,14 +379,9 @@ void pcf85263a_init(void) {
 
 	pcf85263a.state = PCF85263A_STATE_INIT_SET_OFFSET;
 
-	pcf85263a.set_date_time_requested = false;
-	pcf85263a.get_date_time_valid = false;
 	pcf85263a.set_alarm_interval = -1;
-	pcf85263a.set_alarm_requested = false;
 	pcf85263a.get_alarm_interval = -1;
 	pcf85263a.get_alarm_pending = true;
-	pcf85263a.get_alarm_valid = false;
-	pcf85263a.alarm_triggered = false;
 
 	pcf85263a.i2c_fifo.baudrate         = PCF85263A_I2C_BAUDRATE;
 	pcf85263a.i2c_fifo.address          = PCF85263A_I2C_ADDRESS;
