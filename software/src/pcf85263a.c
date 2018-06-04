@@ -816,6 +816,14 @@ void pcf85263a_tick(void) {
 				memcpy(&date_time, &pcf85263a.get_date_time, sizeof(PCF85263ADateTime));
 
 				if (pcf85263a_add_seconds(&date_time, pcf85263a.set_alarm_interval)) {
+					pcf85263a.set_alarm.second    = date_time.second;
+					pcf85263a.set_alarm.minute    = date_time.minute;
+					pcf85263a.set_alarm.hour      = date_time.hour;
+					pcf85263a.set_alarm.day       = date_time.day;
+					pcf85263a.set_alarm.month     = date_time.month;
+					pcf85263a.set_alarm.weekday   = -1;
+					pcf85263a.set_alarm_requested = true;
+
 					data[0] = bin2bcd(date_time.second);
 					data[1] = bin2bcd(date_time.minute);
 					data[2] = bin2bcd(date_time.hour);
