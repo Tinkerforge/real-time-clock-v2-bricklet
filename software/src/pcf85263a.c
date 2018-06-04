@@ -372,16 +372,20 @@ static void pcf85263a_read_calibration(void) {
 	pcf85263a.set_offset = page[PCF85263A_CALIBRATION_OFFSET_POS] + INT8_MIN;
 }
 
-void pcf85263a_init(void) {
-	memset(&pcf85263a, 0, sizeof(PCF85263A));
-
-	pcf85263a_read_calibration();
-
+void  pcf85263a_init_state(void) {
 	pcf85263a.state = PCF85263A_STATE_INIT_SET_OFFSET;
 
 	pcf85263a.set_alarm_interval = -1;
 	pcf85263a.get_alarm_interval = -1;
 	pcf85263a.get_alarm_pending = true;
+
+	i2c_fifo_init(&pcf85263a.i2c_fifo);
+}
+
+void pcf85263a_init(void) {
+	memset(&pcf85263a, 0, sizeof(PCF85263A));
+
+	pcf85263a_read_calibration();
 
 	pcf85263a.i2c_fifo.baudrate         = PCF85263A_I2C_BAUDRATE;
 	pcf85263a.i2c_fifo.address          = PCF85263A_I2C_ADDRESS;
@@ -403,23 +407,15 @@ void pcf85263a_init(void) {
 	pcf85263a.i2c_fifo.sda_fifo_size    = PCF85263A_SDA_FIFO_SIZE;
 	pcf85263a.i2c_fifo.sda_fifo_pointer = PCF85263A_SDA_FIFO_POINTER;
 
-	i2c_fifo_init(&pcf85263a.i2c_fifo);
-
-	const XMC_GPIO_CONFIG_t int_pin_config = {
-		.mode             = XMC_GPIO_MODE_INPUT_PULL_UP,
-		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD,
-	};
-
-	XMC_GPIO_Init(PCF85263A_INT_PIN, &int_pin_config);
+	pcf85263a_init_state();
 }
 
 void pcf85263a_tick(void) {
 	I2CFifoState state = i2c_fifo_next_state(&pcf85263a.i2c_fifo);
 
-	// TODO: Add timeout as error condition?
 	if (state & I2C_FIFO_STATE_ERROR) {
 		loge("PCF85263A I2C error: %d\n\r", state);
-		pcf85263a_init();
+		pcf85263a_init_state();
 		return;
 	}
 
