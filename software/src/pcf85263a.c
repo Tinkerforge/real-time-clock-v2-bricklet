@@ -375,15 +375,15 @@ static void pcf85263a_read_calibration(void) {
 void pcf85263a_init_state(void) {
 	pcf85263a.state = PCF85263A_STATE_INIT_SET_OFFSET;
 
-	pcf85263a.set_alarm_interval = -1;
-	pcf85263a.get_alarm_interval = -1;
-	pcf85263a.get_alarm_pending = true;
-
 	i2c_fifo_init(&pcf85263a.i2c_fifo);
 }
 
 void pcf85263a_init(void) {
 	memset(&pcf85263a, 0, sizeof(PCF85263A));
+
+	pcf85263a.set_alarm_interval = -1;
+	pcf85263a.get_alarm_interval = -1;
+	pcf85263a.get_alarm_requested = true;
 
 	pcf85263a_read_calibration();
 
@@ -463,7 +463,7 @@ void pcf85263a_tick(void) {
 						return;
 					}
 
-					if (pcf85263a.get_alarm_pending) {
+					if (pcf85263a.get_alarm_requested) {
 						if ((data[8] & PCF85263A_REG_RTC_ALARM_ENABLE_A1E_MONTH) != 0) {
 							pcf85263a.get_alarm.month = bcd2bin(data[4]);
 						} else {
@@ -506,7 +506,7 @@ void pcf85263a_tick(void) {
 						}
 
 						pcf85263a.get_alarm_interval = -1;
-						pcf85263a.get_alarm_pending = false;
+						pcf85263a.get_alarm_requested = false;
 						pcf85263a.get_alarm_valid = true;
 					}
 
@@ -570,7 +570,7 @@ void pcf85263a_tick(void) {
 
 					pcf85263a.set_alarm_requested = false;
 					pcf85263a.get_alarm_interval = pcf85263a.set_alarm_interval;
-					pcf85263a.get_alarm_pending = false;
+					pcf85263a.get_alarm_requested = false;
 					pcf85263a.get_alarm_valid = true;
 
 					pcf85263a.state = PCF85263A_STATE_IDLE;
@@ -774,7 +774,7 @@ void pcf85263a_tick(void) {
 			uint8_t data = PCF85263A_REG_STOP_ENABLE_STOP_DISABLED;
 
 			i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_STOP_ENABLE, 1, &data, true);
-		} else if (pcf85263a.state == PCF85263A_STATE_IDLE && pcf85263a.get_alarm_pending && !pcf85263a.get_alarm_valid) {
+		} else if (pcf85263a.state == PCF85263A_STATE_IDLE && pcf85263a.get_alarm_requested && !pcf85263a.get_alarm_valid) {
 			// Get alarm
 			pcf85263a.state = PCF85263A_STATE_GET_ALARM;
 			i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_ALARM1_SECOND, 9);

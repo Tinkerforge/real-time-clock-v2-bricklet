@@ -108,7 +108,7 @@ typedef struct {
 
 	PCF85263AAlarm get_alarm; // always holds the current alarm config, if valid
 	int32_t get_alarm_interval; // in seconds
-	bool get_alarm_pending;
+	bool get_alarm_requested;
 	bool get_alarm_valid;
 
 	uint8_t cached_alarm_flags;
