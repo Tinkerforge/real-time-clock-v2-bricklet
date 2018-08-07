@@ -49,9 +49,10 @@ typedef enum {
 
 	PCF85263A_STATE_GET_DATE_TIME             = PCF85263A_STATE_GET_DATE_TIME_mask | 0x0001,
 
-	PCF85263A_STATE_SET_ALARM_CLEAR_ENABLE    = PCF85263A_STATE_SET_ALARM_mask     | 0x0001,
-	PCF85263A_STATE_SET_ALARM_CLEAR_INTERRUPT = PCF85263A_STATE_SET_ALARM_mask     | 0x0002,
-	PCF85263A_STATE_SET_ALARM_SET_ENABLE      = PCF85263A_STATE_SET_ALARM_mask     | 0x0004,
+	PCF85263A_STATE_SET_ALARM_GET_DATE_TIME   = PCF85263A_STATE_SET_ALARM_mask     | 0x0001,
+	PCF85263A_STATE_SET_ALARM_CLEAR_ENABLE    = PCF85263A_STATE_SET_ALARM_mask     | 0x0002,
+	PCF85263A_STATE_SET_ALARM_CLEAR_INTERRUPT = PCF85263A_STATE_SET_ALARM_mask     | 0x0004,
+	PCF85263A_STATE_SET_ALARM_SET_ENABLE      = PCF85263A_STATE_SET_ALARM_mask     | 0x0008,
 
 	PCF85263A_STATE_GET_ALARM                 = PCF85263A_STATE_GET_ALARM_mask     | 0x0001,
 
@@ -101,6 +102,7 @@ typedef struct {
 	PCF85263AAlarm set_alarm;
 	int32_t set_alarm_interval; // in seconds
 	bool set_alarm_requested;
+	PCF85263ADateTime cached_set_alarm_date_time;
 
 	PCF85263AAlarm get_alarm; // always holds the current alarm config, if valid
 	int32_t get_alarm_interval; // in seconds

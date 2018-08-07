@@ -441,6 +441,20 @@ void pcf85263a_tick(void) {
 					break;
 				}
 
+				case PCF85263A_STATE_SET_ALARM_GET_DATE_TIME: {
+					if (length != 8) {
+						loge("PCF85263A unexpected I2C read length: %d\n\r", length);
+						pcf85263a_init();
+						return;
+					}
+
+					pcf85263a_data_to_date_time(data, &pcf85263a.cached_set_alarm_date_time);
+
+					pcf85263a.state = PCF85263A_STATE_SET_ALARM_CLEAR_ENABLE;
+
+					break;
+				}
+
 				case PCF85263A_STATE_GET_ALARM: {
 					if (length != 9) {
 						loge("PCF85263A unexpected I2C read length: %d\n\r", length);
@@ -761,11 +775,14 @@ void pcf85263a_tick(void) {
 			// Get alarm
 			pcf85263a.state = PCF85263A_STATE_GET_ALARM;
 			i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_ALARM1_SECOND, 9);
-		} else if (pcf85263a.state == PCF85263A_STATE_IDLE && pcf85263a.set_alarm_requested && pcf85263a.get_date_time_valid) {
+		} else if (pcf85263a.state == PCF85263A_STATE_IDLE && pcf85263a.set_alarm_requested) {
+			// Get date and time for alarm
+			pcf85263a.state = PCF85263A_STATE_SET_ALARM_GET_DATE_TIME;
+			i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_TIME_100TH_SECOND, 8);
+		} else if (pcf85263a.state == PCF85263A_STATE_SET_ALARM_CLEAR_ENABLE) {
 			// Clear alarm enable bits
 			uint8_t data = 0;
 
-			pcf85263a.state = PCF85263A_STATE_SET_ALARM_CLEAR_ENABLE;
 			i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_ALARM_ENABLE, 1, &data, true);
 		} else if (pcf85263a.state == PCF85263A_STATE_SET_ALARM_CLEAR_INTERRUPT) {
 			// Clear alarm interrupt flags
