@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 
+#include "bricklib2/protocols/tfp/tfp.h"
 #include "bricklib2/hal/i2c_fifo/i2c_fifo.h"
 
 #define PCF85263A_STATE_INIT_mask          0x0100
@@ -97,6 +98,7 @@ typedef struct {
 	bool set_date_time_requested;
 
 	PCF85263ADateTime get_date_time;
+	bool get_date_time_requested;
 	bool get_date_time_valid;
 
 	PCF85263AAlarm set_alarm;
@@ -109,14 +111,16 @@ typedef struct {
 	bool get_alarm_pending;
 	bool get_alarm_valid;
 
-	uint8_t cached_flags;
-	PCF85263ADateTime cached_date_time; // read after alarm was detected
-
+	uint8_t cached_alarm_flags;
+	PCF85263ADateTime cached_alarm_date_time; // read after alarm was detected
 	PCF85263ADateTime alarm_date_time;
 	bool alarm_triggered;
 
 	int8_t set_offset;
 	bool set_offset_requested;
+
+	bool response_pending;
+	TFPMessageHeader response_header;
 
 	I2CFifo i2c_fifo;
 } PCF85263A;

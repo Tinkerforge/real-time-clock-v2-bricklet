@@ -372,7 +372,7 @@ static void pcf85263a_read_calibration(void) {
 	pcf85263a.set_offset = page[PCF85263A_CALIBRATION_OFFSET_POS] + INT8_MIN;
 }
 
-void  pcf85263a_init_state(void) {
+void pcf85263a_init_state(void) {
 	pcf85263a.state = PCF85263A_STATE_INIT_SET_OFFSET;
 
 	pcf85263a.set_alarm_interval = -1;
@@ -434,6 +434,7 @@ void pcf85263a_tick(void) {
 
 					pcf85263a_data_to_date_time(data, &pcf85263a.get_date_time);
 
+					pcf85263a.get_date_time_requested = false;
 					pcf85263a.get_date_time_valid = true;
 
 					pcf85263a.state = PCF85263A_STATE_IDLE;
@@ -521,7 +522,7 @@ void pcf85263a_tick(void) {
 						return;
 					}
 
-					pcf85263a.cached_flags = data[0];
+					pcf85263a.cached_alarm_flags = data[0];
 					pcf85263a.state = PCF85263A_STATE_CHECK_ALARM_CLEAR_FLAGS;
 
 					break;
@@ -534,7 +535,7 @@ void pcf85263a_tick(void) {
 						return;
 					}
 
-					pcf85263a_data_to_date_time(data, &pcf85263a.cached_date_time);
+					pcf85263a_data_to_date_time(data, &pcf85263a.cached_alarm_date_time);
 
 					pcf85263a.state = PCF85263A_STATE_CHECK_ALARM_TRIGGER;
 
@@ -577,6 +578,8 @@ void pcf85263a_tick(void) {
 				}
 
 				case PCF85263A_STATE_CHECK_ALARM_CLEAR_FLAGS: {
+					// Only actually handle the alarm if the alarm configuration
+					// is known yet. Otherwise just clear and ignore the alarm
 					if (pcf85263a.get_alarm_valid) {
 						pcf85263a.state = PCF85263A_STATE_CHECK_ALARM_GET_DATE_TIME;
 					} else {
@@ -682,7 +685,7 @@ void pcf85263a_tick(void) {
 		} else if (pcf85263a.state == PCF85263A_STATE_CHECK_ALARM_TRIGGER) {
 			pcf85263a.state = PCF85263A_STATE_IDLE;
 
-			if ((pcf85263a.cached_flags & (PCF85263A_REG_FLAGS_ALARM1 | PCF85263A_REG_FLAGS_ALARM2)) != 0) {
+			if ((pcf85263a.cached_alarm_flags & (PCF85263A_REG_FLAGS_ALARM1 | PCF85263A_REG_FLAGS_ALARM2)) != 0) {
 				uint8_t expected = 0;
 				uint8_t found = 0;
 
@@ -693,7 +696,7 @@ void pcf85263a_tick(void) {
 				    pcf85263a.get_alarm.month != -1) {
 					++expected;
 
-					if (pcf85263a.cached_flags & PCF85263A_REG_FLAGS_ALARM1) {
+					if (pcf85263a.cached_alarm_flags & PCF85263A_REG_FLAGS_ALARM1) {
 						++found;
 					}
 				}
@@ -701,7 +704,7 @@ void pcf85263a_tick(void) {
 				if (pcf85263a.get_alarm.weekday != -1) {
 					++expected;
 
-					if (pcf85263a.cached_flags & PCF85263A_REG_FLAGS_ALARM2) {
+					if (pcf85263a.cached_alarm_flags & PCF85263A_REG_FLAGS_ALARM2) {
 						++found;
 					}
 				}
@@ -711,12 +714,12 @@ void pcf85263a_tick(void) {
 				if (expected > 0) {
 					if (expected == found) {
 						triggered = true;
-					} else if (expected == 2 && (pcf85263a.cached_flags & PCF85263A_REG_FLAGS_ALARM1)) {
+					} else if (expected == 2 && (pcf85263a.cached_alarm_flags & PCF85263A_REG_FLAGS_ALARM1)) {
 						// Special case: weekday + other fields are enabled and the
 						// other fields have triggered, but the weekday had already
 						// triggered before or not at all. Manually check if the
 						// weekday still matches to manually trigger the alarm.
-						if (pcf85263a.get_alarm.weekday == pcf85263a.cached_date_time.weekday) {
+						if (pcf85263a.get_alarm.weekday == pcf85263a.cached_alarm_date_time.weekday) {
 							triggered = true;
 						}
 					}
@@ -724,14 +727,14 @@ void pcf85263a_tick(void) {
 
 				if (triggered) {
 					if (!pcf85263a.alarm_triggered) {
-						memcpy(&pcf85263a.alarm_date_time, &pcf85263a.cached_date_time, sizeof(PCF85263ADateTime));
+						memcpy(&pcf85263a.alarm_date_time, &pcf85263a.cached_alarm_date_time, sizeof(PCF85263ADateTime));
 						pcf85263a.alarm_triggered = true;
 					}
 
 					if (pcf85263a.get_alarm_interval > 0 && !pcf85263a.set_alarm_requested) {
 						PCF85263ADateTime date_time;
 
-						memcpy(&date_time, &pcf85263a.cached_date_time, sizeof(PCF85263ADateTime));
+						memcpy(&date_time, &pcf85263a.cached_alarm_date_time, sizeof(PCF85263ADateTime));
 
 						if (pcf85263a_add_seconds(&date_time, pcf85263a.get_alarm_interval)) {
 							pcf85263a.set_alarm.month     = date_time.month;
@@ -826,7 +829,7 @@ void pcf85263a_tick(void) {
 			if (data[8] == 0 && pcf85263a.set_alarm_interval > 0) {
 				PCF85263ADateTime date_time;
 
-				memcpy(&date_time, &pcf85263a.get_date_time, sizeof(PCF85263ADateTime));
+				memcpy(&date_time, &pcf85263a.cached_set_alarm_date_time, sizeof(PCF85263ADateTime));
 
 				if (pcf85263a_add_seconds(&date_time, pcf85263a.set_alarm_interval)) {
 					pcf85263a.set_alarm.second    = date_time.second;
@@ -854,18 +857,20 @@ void pcf85263a_tick(void) {
 			}
 
 			i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_ALARM1_SECOND, 9, data, true);
-		} else if (pcf85263a.state == PCF85263A_STATE_IDLE && pcf85263a.set_offset_requested) {
-			// Set offset
-			uint8_t data = pcf85263a.set_offset;
-
-			pcf85263a_write_calibration();
-
-			pcf85263a.state = PCF85263A_STATE_SET_OFFSET;
-			i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_OFFSET, 1, &data, true);
 		} else if (pcf85263a.state == PCF85263A_STATE_IDLE) {
-			// Get date and time
-			pcf85263a.state = PCF85263A_STATE_GET_DATE_TIME;
-			i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_TIME_100TH_SECOND, 8);
+			if (pcf85263a.set_offset_requested) {
+				// Set offset
+				uint8_t data = pcf85263a.set_offset;
+
+				pcf85263a_write_calibration();
+
+				pcf85263a.state = PCF85263A_STATE_SET_OFFSET;
+				i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_OFFSET, 1, &data, true);
+			} else if (pcf85263a.get_date_time_requested) {
+				// Get date and time
+				pcf85263a.state = PCF85263A_STATE_GET_DATE_TIME;
+				i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_TIME_100TH_SECOND, 8);
+			}
 		} else {
 			loge("PCF85263A unrecognized state: %d\n\r", pcf85263a.state);
 			pcf85263a.state = PCF85263A_STATE_IDLE;

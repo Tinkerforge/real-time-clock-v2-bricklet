@@ -1,2 +1,5 @@
 2018-06-07: 2.0.0 (9cce728)
 - Initial version
+
+2018-08-07: 2.0.1 (<unknown>)
+- Remove unnecessary I2C communication to avoid date-time jumps

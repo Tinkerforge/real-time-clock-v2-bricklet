@@ -97,33 +97,21 @@ BootloaderHandleMessageResponse set_date_time(const SetDateTime *data) {
 }
 
 BootloaderHandleMessageResponse get_date_time(const GetDateTime *data, GetDateTime_Response *response) {
-	if (!pcf85263a.get_date_time_valid) {
-		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
-	}
+	pcf85263a.get_date_time_requested = true;
+	pcf85263a.get_date_time_valid = false;
+	pcf85263a.response_pending = true;
+	pcf85263a.response_header = response->header;
 
-	response->header.length = sizeof(GetDateTime_Response);
-	response->year          = pcf85263a.get_date_time.year;
-	response->month         = pcf85263a.get_date_time.month;
-	response->day           = pcf85263a.get_date_time.day;
-	response->hour          = pcf85263a.get_date_time.hour;
-	response->minute        = pcf85263a.get_date_time.minute;
-	response->second        = pcf85263a.get_date_time.second;
-	response->centisecond   = pcf85263a.get_date_time.centisecond;
-	response->weekday       = pcf85263a.get_date_time.weekday;
-	response->timestamp     = calculate_timestamp(&pcf85263a.get_date_time);
-
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+	return HANDLE_MESSAGE_RESPONSE_NONE;
 }
 
 BootloaderHandleMessageResponse get_timestamp(const GetTimestamp *data, GetTimestamp_Response *response) {
-	if (!pcf85263a.get_date_time_valid) {
-		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
-	}
+	pcf85263a.get_date_time_requested = true;
+	pcf85263a.get_date_time_valid = false;
+	pcf85263a.response_pending = true;
+	pcf85263a.response_header = response->header;
 
-	response->header.length = sizeof(GetTimestamp_Response);
-	response->timestamp     = calculate_timestamp(&pcf85263a.get_date_time);
-
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+	return HANDLE_MESSAGE_RESPONSE_NONE;
 }
 
 BootloaderHandleMessageResponse set_offset(const SetOffset *data) {
@@ -208,14 +196,28 @@ bool handle_date_time_callback(void) {
 	static bool is_buffered = false;
 	static DateTime_Callback cb;
 	static uint32_t last_time = 0;
+	static bool requested = false;
 
 	if (!is_buffered) {
-		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(DateTime_Callback), FID_CALLBACK_DATE_TIME);
-
 		if (date_time_callback_period == 0 ||
 		    !system_timer_is_time_elapsed_ms(last_time, date_time_callback_period)) {
 			return false;
 		}
+
+		if (!pcf85263a.get_date_time_requested && !requested) {
+			pcf85263a.get_date_time_requested = true;
+			pcf85263a.get_date_time_valid = false;
+
+			requested = true;
+
+			return false;
+		}
+
+		if (!pcf85263a.get_date_time_valid) {
+			return false;
+		}
+
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(DateTime_Callback), FID_CALLBACK_DATE_TIME);
 
 		cb.year        = pcf85263a.get_date_time.year;
 		cb.month       = pcf85263a.get_date_time.month;
@@ -228,6 +230,7 @@ bool handle_date_time_callback(void) {
 		cb.timestamp   = calculate_timestamp(&pcf85263a.get_date_time);
 
 		last_time = system_timer_get_ms();
+		requested = false;
 	}
 
 	if (bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
@@ -277,6 +280,36 @@ bool handle_alarm_callback(void) {
 }
 
 void communication_tick(void) {
+	if (pcf85263a.response_pending && pcf85263a.get_date_time_valid && bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
+		if (pcf85263a.response_header.fid == FID_GET_DATE_TIME) {
+			GetDateTime_Response response;
+
+			response.header        = pcf85263a.response_header;
+			response.header.length = sizeof(GetDateTime_Response);
+			response.year          = pcf85263a.get_date_time.year;
+			response.month         = pcf85263a.get_date_time.month;
+			response.day           = pcf85263a.get_date_time.day;
+			response.hour          = pcf85263a.get_date_time.hour;
+			response.minute        = pcf85263a.get_date_time.minute;
+			response.second        = pcf85263a.get_date_time.second;
+			response.centisecond   = pcf85263a.get_date_time.centisecond;
+			response.weekday       = pcf85263a.get_date_time.weekday;
+			response.timestamp     = calculate_timestamp(&pcf85263a.get_date_time);
+
+			bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t *)&response, sizeof(GetDateTime_Response));
+		} else if (pcf85263a.response_header.fid == FID_GET_TIMESTAMP) {
+			GetTimestamp_Response response;
+
+			response.header        = pcf85263a.response_header;
+			response.header.length = sizeof(GetTimestamp_Response);
+			response.timestamp     = calculate_timestamp(&pcf85263a.get_date_time);
+
+			bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t *)&response, sizeof(GetTimestamp_Response));
+		}
+
+		pcf85263a.response_pending = false;
+	}
+
 	communication_callback_tick();
 }
 
