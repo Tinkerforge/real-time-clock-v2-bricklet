@@ -3,3 +3,6 @@
 
 2018-08-07: 2.0.1 (471e58d)
 - Remove unnecessary I2C communication to avoid date-time jumps
+
+2018-08-16: 2.0.2 (<unknown>)
+- Make date-time/timestamp getters synchronous again to avoid potential timeouts

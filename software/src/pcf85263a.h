@@ -71,6 +71,8 @@ typedef enum {
 
 #define PCF85263A_CALIBRATION_MAGIC      0x12345678
 
+#define PCF85263A_GET_DATE_TIME_INTERVAL 250 // milliseconds
+
 typedef struct {
 	uint16_t year;
 	uint8_t month;
@@ -98,8 +100,7 @@ typedef struct {
 	bool set_date_time_requested;
 
 	PCF85263ADateTime get_date_time;
-	bool get_date_time_requested;
-	bool get_date_time_valid;
+	uint32_t get_date_time_since; // == 0 means date-time invalid
 
 	PCF85263AAlarm set_alarm;
 	int32_t set_alarm_interval; // in seconds
@@ -119,13 +120,12 @@ typedef struct {
 	int8_t set_offset;
 	bool set_offset_requested;
 
-	bool response_pending;
-	TFPMessageHeader response_header;
-
 	I2CFifo i2c_fifo;
 } PCF85263A;
 
 void pcf85263a_init(void);
 void pcf85263a_tick(void);
+
+bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, uint32_t seconds, uint32_t milliseconds);
 
 #endif

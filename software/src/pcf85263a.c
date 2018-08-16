@@ -270,7 +270,21 @@ static const uint8_t days_in_this_month_table[12] = {
 	31
 };
 
-static bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, int32_t seconds) {
+bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, uint32_t seconds, uint32_t milliseconds) {
+	// centisecond
+	int32_t centiseconds = (milliseconds + 5) / 10; // +5 for rounding
+
+	date_time->centisecond += centiseconds % 100;
+
+	if (date_time->centisecond > 99) {
+		date_time->centisecond -= 100;
+		++date_time->second;
+	}
+
+	seconds += centiseconds / 100; // this could overflow in theorie, but never will in practice,
+	                               // because either seconds or milliseconds will always be zero
+
+	// second
 	date_time->second += seconds % 60;
 
 	if (date_time->second > 59) {
@@ -278,6 +292,7 @@ static bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, int32_t seconds)
 		++date_time->minute;
 	}
 
+	// minute
 	int32_t minutes = seconds / 60;
 	date_time->minute += minutes % 60;
 
@@ -286,6 +301,7 @@ static bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, int32_t seconds)
 		++date_time->hour;
 	}
 
+	// hour
 	int32_t hours = minutes / 60;
 	date_time->hour += hours % 24;
 
@@ -294,6 +310,7 @@ static bool pcf85263a_add_seconds(PCF85263ADateTime *date_time, int32_t seconds)
 		++date_time->day;
 	}
 
+	// date
 	int32_t days = hours / 24;
 	uint8_t days_in_this_month = days_in_this_month_table[date_time->month - 1];
 
@@ -434,8 +451,7 @@ void pcf85263a_tick(void) {
 
 					pcf85263a_data_to_date_time(data, &pcf85263a.get_date_time);
 
-					pcf85263a.get_date_time_requested = false;
-					pcf85263a.get_date_time_valid = true;
+					pcf85263a.get_date_time_since = system_timer_get_ms();
 
 					pcf85263a.state = PCF85263A_STATE_IDLE;
 
@@ -736,7 +752,7 @@ void pcf85263a_tick(void) {
 
 						memcpy(&date_time, &pcf85263a.cached_alarm_date_time, sizeof(PCF85263ADateTime));
 
-						if (pcf85263a_add_seconds(&date_time, pcf85263a.get_alarm_interval)) {
+						if (pcf85263a_add_seconds(&date_time, pcf85263a.get_alarm_interval, 0)) {
 							pcf85263a.set_alarm.month     = date_time.month;
 							pcf85263a.set_alarm.day       = date_time.day;
 							pcf85263a.set_alarm.hour      = date_time.hour;
@@ -831,7 +847,7 @@ void pcf85263a_tick(void) {
 
 				memcpy(&date_time, &pcf85263a.cached_set_alarm_date_time, sizeof(PCF85263ADateTime));
 
-				if (pcf85263a_add_seconds(&date_time, pcf85263a.set_alarm_interval)) {
+				if (pcf85263a_add_seconds(&date_time, pcf85263a.set_alarm_interval, 0)) {
 					pcf85263a.set_alarm.second    = date_time.second;
 					pcf85263a.set_alarm.minute    = date_time.minute;
 					pcf85263a.set_alarm.hour      = date_time.hour;
@@ -866,7 +882,8 @@ void pcf85263a_tick(void) {
 
 				pcf85263a.state = PCF85263A_STATE_SET_OFFSET;
 				i2c_fifo_write_register(&pcf85263a.i2c_fifo, PCF85263A_REG_OFFSET, 1, &data, true);
-			} else if (pcf85263a.get_date_time_requested) {
+			} else if (pcf85263a.get_date_time_since == 0 ||
+			           system_timer_is_time_elapsed_ms(pcf85263a.get_date_time_since, PCF85263A_GET_DATE_TIME_INTERVAL)) {
 				// Get date and time
 				pcf85263a.state = PCF85263A_STATE_GET_DATE_TIME;
 				i2c_fifo_read_register(&pcf85263a.i2c_fifo, PCF85263A_REG_RTC_TIME_100TH_SECOND, 8);
