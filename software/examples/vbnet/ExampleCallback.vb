@@ -34,7 +34,7 @@ Module ExampleCallback
         ' Register date and time callback to subroutine DateTimeCB
         AddHandler rtc.DateTimeCallback, AddressOf DateTimeCB
 
-        ' Set period for date_time callback to 5s (5000ms)
+        ' Set period for date and time callback to 5s (5000ms)
         rtc.SetDateTimeCallbackConfiguration(5000)
 
         Console.WriteLine("Press key to exit")
