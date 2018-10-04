@@ -7,5 +7,5 @@
 2018-08-16: 2.0.2 (af7685c)
 - Make date-time/timestamp getters synchronous again to avoid potential timeouts
 
-2018-10-04: 2.0.3 (TBD)
+2018-10-04: 2.0.3 (7a4666e)
 - Fix race condition with potential buffer overflow (through bricklib2)
