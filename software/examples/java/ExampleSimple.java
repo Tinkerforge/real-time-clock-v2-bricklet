@@ -29,7 +29,23 @@ public class ExampleSimple {
 		System.out.println("Minute: " + dateTime.minute);
 		System.out.println("Second: " + dateTime.second);
 		System.out.println("Centisecond: " + dateTime.centisecond);
-		System.out.println("Weekday: " + dateTime.weekday);
+
+		if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_MONDAY) {
+			System.out.println("Weekday: Monday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_TUESDAY) {
+			System.out.println("Weekday: Tuesday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY) {
+			System.out.println("Weekday: Wednesday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_THURSDAY) {
+			System.out.println("Weekday: Thursday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_FRIDAY) {
+			System.out.println("Weekday: Friday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_SATURDAY) {
+			System.out.println("Weekday: Saturday");
+		} else if(dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_SUNDAY) {
+			System.out.println("Weekday: Sunday");
+		}
+
 		System.out.println("Timestamp: " + dateTime.timestamp + " ms");
 
 		System.out.println("Press key to exit"); System.in.read();

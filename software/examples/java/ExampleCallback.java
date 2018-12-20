@@ -30,7 +30,23 @@ public class ExampleCallback {
 				System.out.println("Minute: " + minute);
 				System.out.println("Second: " + second);
 				System.out.println("Centisecond: " + centisecond);
-				System.out.println("Weekday: " + weekday);
+
+				if(weekday == BrickletRealTimeClockV2.WEEKDAY_MONDAY) {
+					System.out.println("Weekday: Monday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_TUESDAY) {
+					System.out.println("Weekday: Tuesday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY) {
+					System.out.println("Weekday: Wednesday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_THURSDAY) {
+					System.out.println("Weekday: Thursday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_FRIDAY) {
+					System.out.println("Weekday: Friday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_SATURDAY) {
+					System.out.println("Weekday: Saturday");
+				} else if(weekday == BrickletRealTimeClockV2.WEEKDAY_SUNDAY) {
+					System.out.println("Weekday: Sunday");
+				}
+
 				System.out.println("Timestamp: " + timestamp);
 				System.out.println("");
 			}

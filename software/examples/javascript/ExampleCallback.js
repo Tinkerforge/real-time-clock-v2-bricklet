@@ -32,7 +32,29 @@ rtc.on(Tinkerforge.BrickletRealTimeClockV2.CALLBACK_DATE_TIME,
         console.log('Minute: ' + minute);
         console.log('Second: ' + second);
         console.log('Centisecond: ' + centisecond);
-        console.log('Weekday: ' + weekday);
+
+        if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_MONDAY) {
+            console.log('Weekday: Monday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_TUESDAY) {
+            console.log('Weekday: Tuesday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY) {
+            console.log('Weekday: Wednesday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_THURSDAY) {
+            console.log('Weekday: Thursday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_FRIDAY) {
+            console.log('Weekday: Friday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SATURDAY) {
+            console.log('Weekday: Saturday');
+        }
+        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SUNDAY) {
+            console.log('Weekday: Sunday');
+        }
+
         console.log('Timestamp: ' + timestamp);
         console.log();
     }

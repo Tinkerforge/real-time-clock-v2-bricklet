@@ -31,7 +31,23 @@ function cb_date_time(e)
     fprintf('Minute: %i\n', e.minute);
     fprintf('Second: %i\n', e.second);
     fprintf('Centisecond: %i\n', e.centisecond);
-    fprintf('Weekday: %i\n', e.weekday);
+
+    if e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_MONDAY
+        fprintf('Weekday: Monday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_TUESDAY
+        fprintf('Weekday: Tuesday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY
+        fprintf('Weekday: Wednesday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_THURSDAY
+        fprintf('Weekday: Thursday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_FRIDAY
+        fprintf('Weekday: Friday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SATURDAY
+        fprintf('Weekday: Saturday\n');
+    elseif e.weekday == com.tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SUNDAY
+        fprintf('Weekday: Sunday\n');
+    end
+
     fprintf('Timestamp: %i\n', e.timestamp);
     fprintf('\n');
 end

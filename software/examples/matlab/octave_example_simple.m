@@ -21,7 +21,23 @@ function octave_example_simple()
     fprintf("Minute: %d\n", dateTime.minute);
     fprintf("Second: %d\n", dateTime.second);
     fprintf("Centisecond: %d\n", dateTime.centisecond);
-    fprintf("Weekday: %d\n", dateTime.weekday);
+
+    if dateTime.weekday == 1
+        fprintf("Weekday: Monday\n");
+    elseif dateTime.weekday == 2
+        fprintf("Weekday: Tuesday\n");
+    elseif dateTime.weekday == 3
+        fprintf("Weekday: Wednesday\n");
+    elseif dateTime.weekday == 4
+        fprintf("Weekday: Thursday\n");
+    elseif dateTime.weekday == 5
+        fprintf("Weekday: Friday\n");
+    elseif dateTime.weekday == 6
+        fprintf("Weekday: Saturday\n");
+    elseif dateTime.weekday == 7
+        fprintf("Weekday: Sunday\n");
+    end
+
     fprintf("Timestamp: %d ms\n", java2int(dateTime.timestamp));
 
     input("Press key to exit\n", "s");

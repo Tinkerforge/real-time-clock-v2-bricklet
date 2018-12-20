@@ -26,7 +26,23 @@ echo "Hour: " . $date_time['hour'] . "\n";
 echo "Minute: " . $date_time['minute'] . "\n";
 echo "Second: " . $date_time['second'] . "\n";
 echo "Centisecond: " . $date_time['centisecond'] . "\n";
-echo "Weekday: " . $date_time['weekday'] . "\n";
+
+if ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_MONDAY) {
+    echo "Weekday: Monday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_TUESDAY) {
+    echo "Weekday: Tuesday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_WEDNESDAY) {
+    echo "Weekday: Wednesday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_THURSDAY) {
+    echo "Weekday: Thursday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_FRIDAY) {
+    echo "Weekday: Friday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_SATURDAY) {
+    echo "Weekday: Saturday\n";
+} elseif ($date_time['weekday'] == BrickletRealTimeClockV2::WEEKDAY_SUNDAY) {
+    echo "Weekday: Sunday\n";
+}
+
 echo "Timestamp: " . $date_time['timestamp'] . " ms\n";
 
 echo "Press key to exit\n";

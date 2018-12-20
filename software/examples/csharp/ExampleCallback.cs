@@ -19,7 +19,36 @@ class Example
 		Console.WriteLine("Minute: " + minute);
 		Console.WriteLine("Second: " + second);
 		Console.WriteLine("Centisecond: " + centisecond);
-		Console.WriteLine("Weekday: " + weekday);
+
+		if(weekday == BrickletRealTimeClockV2.WEEKDAY_MONDAY)
+		{
+			Console.WriteLine("Weekday: Monday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_TUESDAY)
+		{
+			Console.WriteLine("Weekday: Tuesday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY)
+		{
+			Console.WriteLine("Weekday: Wednesday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_THURSDAY)
+		{
+			Console.WriteLine("Weekday: Thursday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_FRIDAY)
+		{
+			Console.WriteLine("Weekday: Friday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_SATURDAY)
+		{
+			Console.WriteLine("Weekday: Saturday");
+		}
+		else if(weekday == BrickletRealTimeClockV2.WEEKDAY_SUNDAY)
+		{
+			Console.WriteLine("Weekday: Sunday");
+		}
+
 		Console.WriteLine("Timestamp: " + timestamp);
 		Console.WriteLine("");
 	}

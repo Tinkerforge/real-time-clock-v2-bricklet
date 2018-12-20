@@ -57,7 +57,29 @@
                         textArea.value += 'Minute: ' + minute + '\n';
                         textArea.value += 'Second: ' + second + '\n';
                         textArea.value += 'Centisecond: ' + centisecond + '\n';
-                        textArea.value += 'Weekday: ' + weekday + '\n';
+
+                        if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_MONDAY) {
+                            textArea.value += 'Weekday: Monday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_TUESDAY) {
+                            textArea.value += 'Weekday: Tuesday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY) {
+                            textArea.value += 'Weekday: Wednesday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_THURSDAY) {
+                            textArea.value += 'Weekday: Thursday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_FRIDAY) {
+                            textArea.value += 'Weekday: Friday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SATURDAY) {
+                            textArea.value += 'Weekday: Saturday\n';
+                        }
+                        else if(weekday === Tinkerforge.BrickletRealTimeClockV2.WEEKDAY_SUNDAY) {
+                            textArea.value += 'Weekday: Sunday\n';
+                        }
+
                         textArea.value += 'Timestamp: ' + timestamp + '\n';
                         textArea.value += '\n';
                         textArea.scrollTop = textArea.scrollHeight;

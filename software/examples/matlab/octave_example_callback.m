@@ -30,7 +30,23 @@ function cb_date_time(e)
     fprintf("Minute: %d\n", e.minute);
     fprintf("Second: %d\n", e.second);
     fprintf("Centisecond: %d\n", e.centisecond);
-    fprintf("Weekday: %d\n", e.weekday);
+
+    if e.weekday == 1
+        fprintf("Weekday: Monday\n");
+    elseif e.weekday == 2
+        fprintf("Weekday: Tuesday\n");
+    elseif e.weekday == 3
+        fprintf("Weekday: Wednesday\n");
+    elseif e.weekday == 4
+        fprintf("Weekday: Thursday\n");
+    elseif e.weekday == 5
+        fprintf("Weekday: Friday\n");
+    elseif e.weekday == 6
+        fprintf("Weekday: Saturday\n");
+    elseif e.weekday == 7
+        fprintf("Weekday: Sunday\n");
+    end
+
     fprintf("Timestamp: %d\n", java2int(e.timestamp));
     fprintf("\n");
 end

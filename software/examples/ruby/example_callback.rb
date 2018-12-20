@@ -29,7 +29,23 @@ rtc.register_callback(BrickletRealTimeClockV2::CALLBACK_DATE_TIME) do |year, mon
   puts "Minute: #{minute}"
   puts "Second: #{second}"
   puts "Centisecond: #{centisecond}"
-  puts "Weekday: #{weekday}"
+
+  if weekday == BrickletRealTimeClockV2::WEEKDAY_MONDAY
+    puts "Weekday: Monday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_TUESDAY
+    puts "Weekday: Tuesday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_WEDNESDAY
+    puts "Weekday: Wednesday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_THURSDAY
+    puts "Weekday: Thursday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_FRIDAY
+    puts "Weekday: Friday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_SATURDAY
+    puts "Weekday: Saturday"
+  elsif weekday == BrickletRealTimeClockV2::WEEKDAY_SUNDAY
+    puts "Weekday: Sunday"
+  end
+
   puts "Timestamp: #{timestamp}"
   puts ''
 end

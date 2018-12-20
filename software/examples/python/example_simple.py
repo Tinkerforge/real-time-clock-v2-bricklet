@@ -26,7 +26,22 @@ if __name__ == "__main__":
     print("Minute: " + str(minute))
     print("Second: " + str(second))
     print("Centisecond: " + str(centisecond))
-    print("Weekday: " + str(weekday))
+
+    if weekday == rtc.WEEKDAY_MONDAY:
+        print("Weekday: Monday")
+    elif weekday == rtc.WEEKDAY_TUESDAY:
+        print("Weekday: Tuesday")
+    elif weekday == rtc.WEEKDAY_WEDNESDAY:
+        print("Weekday: Wednesday")
+    elif weekday == rtc.WEEKDAY_THURSDAY:
+        print("Weekday: Thursday")
+    elif weekday == rtc.WEEKDAY_FRIDAY:
+        print("Weekday: Friday")
+    elif weekday == rtc.WEEKDAY_SATURDAY:
+        print("Weekday: Saturday")
+    elif weekday == rtc.WEEKDAY_SUNDAY:
+        print("Weekday: Sunday")
+
     print("Timestamp: " + str(timestamp) + " ms")
 
     raw_input("Press key to exit\n") # Use input() in Python 3

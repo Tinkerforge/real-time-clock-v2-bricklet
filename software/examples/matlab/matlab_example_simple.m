@@ -22,7 +22,23 @@ function matlab_example_simple()
     fprintf('Minute: %i\n', dateTime.minute);
     fprintf('Second: %i\n', dateTime.second);
     fprintf('Centisecond: %i\n', dateTime.centisecond);
-    fprintf('Weekday: %i\n', dateTime.weekday);
+
+    if dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_MONDAY
+        fprintf('Weekday: Monday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_TUESDAY
+        fprintf('Weekday: Tuesday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY
+        fprintf('Weekday: Wednesday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_THURSDAY
+        fprintf('Weekday: Thursday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_FRIDAY
+        fprintf('Weekday: Friday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_SATURDAY
+        fprintf('Weekday: Saturday\n');
+    elseif dateTime.weekday == BrickletRealTimeClockV2.WEEKDAY_SUNDAY
+        fprintf('Weekday: Sunday\n');
+    end
+
     fprintf('Timestamp: %i ms\n', dateTime.timestamp);
 
     input('Press key to exit\n', 's');

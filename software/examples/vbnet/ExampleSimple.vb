@@ -28,7 +28,23 @@ Module ExampleSimple
         Console.WriteLine("Minute: " + minute.ToString())
         Console.WriteLine("Second: " + second.ToString())
         Console.WriteLine("Centisecond: " + centisecond.ToString())
-        Console.WriteLine("Weekday: " + weekday.ToString())
+
+        If weekday = BrickletRealTimeClockV2.WEEKDAY_MONDAY Then
+            Console.WriteLine("Weekday: Monday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_TUESDAY Then
+            Console.WriteLine("Weekday: Tuesday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_WEDNESDAY Then
+            Console.WriteLine("Weekday: Wednesday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_THURSDAY Then
+            Console.WriteLine("Weekday: Thursday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_FRIDAY Then
+            Console.WriteLine("Weekday: Friday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_SATURDAY Then
+            Console.WriteLine("Weekday: Saturday")
+        Else If weekday = BrickletRealTimeClockV2.WEEKDAY_SUNDAY Then
+            Console.WriteLine("Weekday: Sunday")
+        End If
+
         Console.WriteLine("Timestamp: " + timestamp.ToString() + " ms")
 
         Console.WriteLine("Press key to exit")

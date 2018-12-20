@@ -14,17 +14,33 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected.
 
     // Get current date and time.
-    let get_date_time_result = rtc.get_date_time().recv()?;
+    let date_time = rtc.get_date_time().recv()?;
 
-    println!("Year: {}", get_date_time_result.year);
-    println!("Month: {}", get_date_time_result.month);
-    println!("Day: {}", get_date_time_result.day);
-    println!("Hour: {}", get_date_time_result.hour);
-    println!("Minute: {}", get_date_time_result.minute);
-    println!("Second: {}", get_date_time_result.second);
-    println!("Centisecond: {}", get_date_time_result.centisecond);
-    println!("Weekday: {}", get_date_time_result.weekday);
-    println!("Timestamp: {} ms", get_date_time_result.timestamp);
+    println!("Year: {}", date_time.year);
+    println!("Month: {}", date_time.month);
+    println!("Day: {}", date_time.day);
+    println!("Hour: {}", date_time.hour);
+    println!("Minute: {}", date_time.minute);
+    println!("Second: {}", date_time.second);
+    println!("Centisecond: {}", date_time.centisecond);
+
+    if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_MONDAY {
+        println!("Weekday: Monday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_TUESDAY {
+        println!("Weekday: Tuesday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_WEDNESDAY {
+        println!("Weekday: Wednesday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_THURSDAY {
+        println!("Weekday: Thursday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_FRIDAY {
+        println!("Weekday: Friday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_SATURDAY {
+        println!("Weekday: Saturday");
+    } else if date_time.weekday == REAL_TIME_CLOCK_V2_BRICKLET_WEEKDAY_SUNDAY {
+        println!("Weekday: Sunday");
+    }
+
+    println!("Timestamp: {} ms", date_time.timestamp);
 
     println!("Press enter to exit.");
     let mut _input = String::new();
