@@ -1,0 +1,8 @@
+
+
+# Change XYZ to the UID of your Real-Time Clock Bricklet 2.0
+
+setup:
+	# Get current date and time
+	subscribe to tinkerforge/response/real_time_clock_v2/XYZ/get_date_time
+	publish '' to tinkerforge/request/real_time_clock_v2_bricklet/XYZ/get_date_time 
