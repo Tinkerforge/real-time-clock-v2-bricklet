@@ -1,8 +1,9 @@
 #define __STDC_FORMAT_MACROS // for PRId64/PRIu64 in C++
 
+#include <inttypes.h>
+
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_real_time_clock_v2.h"
-#include <inttypes.h>
 
 #define UID "XYZ" // Change XYZ to the UID of your Real-Time Clock Bricklet 2.0
 
@@ -49,15 +50,13 @@ void example_setup(TF_HalContext *hal) {
 	// Create device object
 	check(tf_real_time_clock_v2_create(&rtc, UID, hal), "create device object");
 
-
 	// Register date and time callback to function date_time_handler
 	tf_real_time_clock_v2_register_date_time_callback(&rtc,
-	                                                 date_time_handler,
-	                                                 NULL);
+	                                                  date_time_handler,
+	                                                  NULL);
 
 	// Set period for date and time callback to 5s (5000ms)
 	tf_real_time_clock_v2_set_date_time_callback_configuration(&rtc, 5000);
-
 }
 
 void example_loop(TF_HalContext *hal) {
