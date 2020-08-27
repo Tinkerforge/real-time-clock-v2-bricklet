@@ -1,7 +1,3 @@
-#define __STDC_FORMAT_MACROS // for PRId64/PRIu64 in C++
-
-#include <inttypes.h>
-
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_real_time_clock_v2.h"
 
@@ -46,7 +42,7 @@ void example_setup(TF_HalContext *hal) {
 		tf_hal_printf("Weekday: Sunday\n");
 	}
 
-	tf_hal_printf("Timestamp: %" PRId64 " ms\n", timestamp);
+	tf_hal_printf("Timestamp: %lld ms\n", timestamp);
 }
 
 void example_loop(TF_HalContext *hal) {
