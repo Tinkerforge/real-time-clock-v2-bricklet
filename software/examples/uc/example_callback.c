@@ -5,11 +5,15 @@
 
 void check(int rc, const char* msg);
 
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
+
 // Callback function for date and time callback
-void date_time_handler(TF_RealTimeClockV2 *device, uint16_t year, uint8_t month,
-                       uint8_t day, uint8_t hour, uint8_t minute, uint8_t second,
-                       uint8_t centisecond, uint8_t weekday, int64_t timestamp,
-                       void *user_data) {
+static void date_time_handler(TF_RealTimeClockV2 *device, uint16_t year, uint8_t month,
+                              uint8_t day, uint8_t hour, uint8_t minute, uint8_t second,
+                              uint8_t centisecond, uint8_t weekday, int64_t timestamp,
+                              void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Year: %u\n", year);
@@ -40,7 +44,7 @@ void date_time_handler(TF_RealTimeClockV2 *device, uint16_t year, uint8_t month,
 	tf_hal_printf("\n");
 }
 
-TF_RealTimeClockV2 rtc;
+static TF_RealTimeClockV2 rtc;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object
