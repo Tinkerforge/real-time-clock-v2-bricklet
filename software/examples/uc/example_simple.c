@@ -22,13 +22,13 @@ void example_setup(TF_HalContext *hal) {
 	                                          &second, &centisecond, &weekday,
 	                                          &timestamp), "get date and time");
 
-	tf_hal_printf("Year: %u\n", year);
-	tf_hal_printf("Month: %u\n", month);
-	tf_hal_printf("Day: %u\n", day);
-	tf_hal_printf("Hour: %u\n", hour);
-	tf_hal_printf("Minute: %u\n", minute);
-	tf_hal_printf("Second: %u\n", second);
-	tf_hal_printf("Centisecond: %u\n", centisecond);
+	tf_hal_printf("Year: %I16u\n", year);
+	tf_hal_printf("Month: %I8u\n", month);
+	tf_hal_printf("Day: %I8u\n", day);
+	tf_hal_printf("Hour: %I8u\n", hour);
+	tf_hal_printf("Minute: %I8u\n", minute);
+	tf_hal_printf("Second: %I8u\n", second);
+	tf_hal_printf("Centisecond: %I8u\n", centisecond);
 
 	if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_MONDAY) {
 		tf_hal_printf("Weekday: Monday\n");
@@ -46,7 +46,7 @@ void example_setup(TF_HalContext *hal) {
 		tf_hal_printf("Weekday: Sunday\n");
 	}
 
-	tf_hal_printf("Timestamp: %lld ms\n", timestamp);
+	tf_hal_printf("Timestamp: %I64d ms\n", timestamp);
 }
 
 void example_loop(TF_HalContext *hal) {
