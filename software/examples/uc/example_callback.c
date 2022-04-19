@@ -9,8 +9,8 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 // Callback function for date and time callback
@@ -28,19 +28,19 @@ static void date_time_handler(TF_RealTimeClockV2 *device, uint16_t year, uint8_t
 	tf_hal_printf("Second: %I8u\n", second);
 	tf_hal_printf("Centisecond: %I8u\n", centisecond);
 
-	if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_MONDAY) {
+	if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_MONDAY) {
 		tf_hal_printf("Weekday: Monday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_TUESDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_TUESDAY) {
 		tf_hal_printf("Weekday: Tuesday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_WEDNESDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_WEDNESDAY) {
 		tf_hal_printf("Weekday: Wednesday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_THURSDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_THURSDAY) {
 		tf_hal_printf("Weekday: Thursday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_FRIDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_FRIDAY) {
 		tf_hal_printf("Weekday: Friday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_SATURDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_SATURDAY) {
 		tf_hal_printf("Weekday: Saturday\n");
-	} else if(weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_SUNDAY) {
+	} else if (weekday == TF_REAL_TIME_CLOCK_V2_WEEKDAY_SUNDAY) {
 		tf_hal_printf("Weekday: Sunday\n");
 	}
 
@@ -50,7 +50,7 @@ static void date_time_handler(TF_RealTimeClockV2 *device, uint16_t year, uint8_t
 
 static TF_RealTimeClockV2 rtc;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_real_time_clock_v2_create(&rtc, UID, hal), "create device object");
 
@@ -63,7 +63,7 @@ void example_setup(TF_HalContext *hal) {
 	tf_real_time_clock_v2_set_date_time_callback_configuration(&rtc, 5000);
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }
