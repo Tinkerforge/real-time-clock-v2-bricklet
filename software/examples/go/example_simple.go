@@ -21,13 +21,13 @@ func main() {
 	// Get current date and time.
 	year, month, day, hour, minute, second, centisecond, weekday, timestamp, _ := rtc.GetDateTime()
 
-	fmt.Printf("Year: \n", year)
-	fmt.Printf("Month: \n", month)
-	fmt.Printf("Day: \n", day)
-	fmt.Printf("Hour: \n", hour)
-	fmt.Printf("Minute: \n", minute)
-	fmt.Printf("Second: \n", second)
-	fmt.Printf("Centisecond: \n", centisecond)
+	fmt.Printf("Year: %d\n", year)
+	fmt.Printf("Month: %d\n", month)
+	fmt.Printf("Day: %d\n", day)
+	fmt.Printf("Hour: %d\n", hour)
+	fmt.Printf("Minute: %d\n", minute)
+	fmt.Printf("Second: %d\n", second)
+	fmt.Printf("Centisecond: %d\n", centisecond)
 
 	if weekday == real_time_clock_v2_bricklet.WeekdayMonday {
 		fmt.Println("Weekday: Monday")
@@ -45,7 +45,7 @@ func main() {
 		fmt.Println("Weekday: Sunday")
 	}
 
-	fmt.Printf("Timestamp:  ms\n", timestamp)
+	fmt.Printf("Timestamp: %d ms\n", timestamp)
 
 	fmt.Print("Press enter to exit.")
 	fmt.Scanln()
