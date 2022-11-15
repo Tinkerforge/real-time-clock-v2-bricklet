@@ -449,9 +449,10 @@ void pcf85263a_tick(void) {
 						return;
 					}
 
-					pcf85263a_data_to_date_time(data, &pcf85263a.get_date_time);
-
-					pcf85263a.get_date_time_since = system_timer_get_ms();
+					if(!pcf85263a.set_date_time_requested) {
+						pcf85263a_data_to_date_time(data, &pcf85263a.get_date_time);
+						pcf85263a.get_date_time_since = system_timer_get_ms();
+					}
 
 					pcf85263a.state = PCF85263A_STATE_IDLE;
 
