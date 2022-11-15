@@ -10,5 +10,5 @@
 2018-10-04: 2.0.3 (7a4666e)
 - Fix race condition with potential buffer overflow (through bricklib2)
 
-2022-11-15: 2.0.4 (TBD)
+2022-11-15: 2.0.4 (87a77d8)
 - Fix race condition between set/get_date_time
